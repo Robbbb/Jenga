@@ -76,18 +76,22 @@ def get_tower_from_vision():
     savestr2 = './current_pics/right_cam.JPG';    
     command_string1 = "fswebcam -D 1 -S 40 -d /dev/video4 " + savestr1;
     command_string2 = "fswebcam -D 1 -S 40 -d /dev/video3 " + savestr2;
-    os.system(command_string1);
-    os.system(command_string2)
-    #savestr1 = './left.JPG';
-    #savestr2 = './right.JPG';
+    #os.system(command_string1);
+    #os.system(command_string2)
+    savestr1 = './left.JPG';
+    savestr2 = './right.JPG';
 
-    outstr1 = './current_pics/left_out.JPG';
-    outstr2 = './current_pics/right_out.JPG';
     #outstr1 = './current_pics/left_out.JPG';
     #outstr2 = './current_pics/right_out.JPG';
-    (t1, rowsl, colsl) = vision.main(savestr1, outstr1, vision.left_tower);
+    outstr1 = './current_pics/left_out.JPG';
+    outstr2 = './current_pics/right_out.JPG';
+    left_t = [48,15,198,286];
+    right_t = [153,55,284,286]; 
+    #(t1, rowsl, colsl) = vision.main(savestr1, outstr1, vision.left_tower);
+    (t1, rowsl, colsl) = vision.main(savestr1, outstr1, left_t);
     (t1, rowsl, colsl) = remove_bullshit(t1, rowsl, colsl);
-    (t2, rowsr, colsr) = vision.main(savestr2, outstr2, vision.right_tower);
+    #(t2, rowsr, colsr) = vision.main(savestr2, outstr2, vision.right_tower);
+    (t2, rowsr, colsr) = vision.main(savestr2, outstr2, right_t);
     (t2, rowsr, colsr) = remove_bullshit(t2, rowsr, colsr);
     print("left is");
     print(t1);
@@ -102,7 +106,7 @@ def get_tower_from_vision():
     t_full = [t, rowsl, colsl, rowsr, colsr]
     return t_full;
     #return t1;
-#get_tower_from_vision();
+get_tower_from_vision();
 
 def get_end_error(bbox_end, r_block, c_block, in_left):
     if (len(bbox_end) == 0):

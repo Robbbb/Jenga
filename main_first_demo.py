@@ -325,6 +325,6 @@ def callibrate():
         temp = ser.write(lin);
         result = ser.readline();
     print(result);
-#callibrate()
-#one_player_main()
-versus_human();
+callibrate()
+one_player_main()
+#versus_human();

@@ -269,3 +269,5 @@ def main_two_player():
             print("computer lost, I have dishonored master, computer overlords will have to wait, for now.....");
             return;
     return;
+
+main_two_player();
