@@ -25,7 +25,7 @@ int pos2;
 int pos3;
 int spinServoPin = 14; //(A0)
 int rodSpanInches = 11;//desired span of lead screws
-int maxSpeed = 100;//I have not yet played with this. Higher is faster, obvi
+int maxSpeed = 50;//I have not yet played with this. Higher is faster, obvi
 //float maxAccel = 300.0;
 int need_new;
 int first_goal;

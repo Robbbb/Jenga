@@ -24,6 +24,7 @@ def remove_bullshit(t, rows, cols):
         distances.append(dist);
     print(distances);
     med_dist = numpy.median(distances);
+    print(med_dist);
     check_rows = [];
     for i in range(len(distances)):
         deviation = distances[i] - med_dist;
@@ -32,7 +33,7 @@ def remove_bullshit(t, rows, cols):
             check_rows.append(i+1);
     for i in range(len(check_rows)):
         if(check_rows[i] == 0):
-            if (len(check_rows == 1)):
+            if (len(check_rows) == 1):
                 del(rows[0]);
                 del(t[0]);
                 return (t,rows, cols);
@@ -42,7 +43,7 @@ def remove_bullshit(t, rows, cols):
                 return remove_bullshit(t, rows, cols);
             else:
                 continue
-        elif(check_rows[i] == (len(rows) -1)):
+        elif(check_rows[i] == (len(check_rows) -1)):
             print('rows are');
             print(rows);
             print('checed are');
@@ -56,7 +57,7 @@ def remove_bullshit(t, rows, cols):
                 print(rows);
                 print('checked rows are');
                 print(check_rows);
-                assert(False);
+        
         else:
             if (check_rows[i] == check_rows[i+1]):
                 del(rows[check_rows[i]]);
@@ -69,19 +70,19 @@ def remove_bullshit(t, rows, cols):
 
 
 def get_tower_from_vision():
-    savestr1 = '~/jenga/current_pics/left_cam.JPG';
-    savestr2 = '~/jenga/current_pics/right_cam.JPG';
-    #command_string1 = "fswebcam -S 40 -d /dev/video4 " + savestr1;
-    #command_string2 = "fswebcam -S 40 -d /dev/video3 " + savestr2;
-    #os.system(command_string1);
-    #os.system(command_string2)
-    savestr1 = './left.JPG';
-    savestr2 = './right.JPG';
+    savestr1 = './current_pics/left_cam.JPG';
+    savestr2 = './current_pics/right_cam.JPG';
+    command_string1 = "fswebcam -S 40 -d /dev/video4 " + savestr1;
+    command_string2 = "fswebcam -S 40 -d /dev/video3 " + savestr2;
+    os.system(command_string1);
+    os.system(command_string2)
+    #savestr1 = './left.JPG';
+    #savestr2 = './right.JPG';
 
-    outstr1 = '~/jenga/current_pics/left_out.JPG';
-    outstr2 = '~/jenga/current_pics/right_out.JPG';
     outstr1 = './current_pics/left_out.JPG';
     outstr2 = './current_pics/right_out.JPG';
+    #outstr1 = './current_pics/left_out.JPG';
+    #outstr2 = './current_pics/right_out.JPG';
     (t1, rowsl, colsl) = vision.main(savestr1, outstr1, vision.left_tower);
     (t1, rowsl, colsl) = remove_bullshit(t1, rowsl, colsl);
     (t2, rowsr, colsr) = vision.main(savestr2, outstr2, vision.right_tower);

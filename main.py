@@ -22,7 +22,7 @@ def versus_human_smart():
         in_str = str(next_move[0]) + ' ';
         in_str += str(next_move[1]) + ' ';
         in_str += str(next_move[2]) + ' ';
-        in_str += str(next_move[3]) + ' 0  >waypoints.txt';
+        in_str += str(next_move[3]) + ' 1  >waypoints.txt';
         in_str = './waypoints '+ in_str;
         os.system(in_str);
         vision_mode = 'take'
@@ -192,7 +192,7 @@ def one_player_main():
 
 
 def callibrate():
-`    ser = serial.Serial('/dev/ttyS0', 9600);
+    ser = serial.Serial('/dev/ttyS0', 9600);
     print ("serial successful");
     while (True):
         lin = raw_input("what input should I do?");

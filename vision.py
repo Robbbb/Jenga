@@ -52,7 +52,7 @@ def get_subtower(blocks):
         in_rows = False
         while (i < len(row)):
             y_row = row[i];
-            if (abs(y_row - yavg) < 5):
+            if (abs(y_row - yavg) < 10):
                 in_rows = True
             i += 1
         if (not in_rows):
@@ -87,18 +87,21 @@ def get_subtower(blocks):
 
 
 
-left_tower = [55, 15, 192, 286];
-right_tower = [154, 15, 285, 286];
+left_tower = [71, 15, 210, 286];
+right_tower = [166, 15, 315, 286];
 
 def main(sfilename, dfilename, tower_location):#source then destination
+    print(sfilename);
     real_img = cv2.imread(sfilename, cv2.CV_LOAD_IMAGE_COLOR);
     bw = cv2.imread(sfilename,cv2.CV_LOAD_IMAGE_GRAYSCALE)
+    cv2.imwrite('./current_pics/test.JPG', bw);
     #cv2.adaptiveBilateralFilter(bw, (7, 7), 2)
     bw = cv2.GaussianBlur(bw, (15,15), 1);#works solidly well
     #edges = cv2.Canny(bw, 12.75,31.875);
-    edges = cv2.Canny(bw, 70, 175);
+    edges = cv2.Canny(bw, 70, 160);
     #edges = cv2.Canny(bw, 100, 200);
     cfile_name = sfilename[:-4] + '_canny' + '.JPG';
+    print(cfile_name);
     cv2.imwrite(cfile_name, edges);
     startx, starty, endx, endy = tower_location;
     edges = edges[starty:endy, startx:endx];
