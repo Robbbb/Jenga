@@ -104,28 +104,28 @@ def one_player_main():
     t = jenga_logic.create_tower();
     currentxyz =[];
     while(jenga_logic.current_state(t)): #while tower is still up
-        t_full = vision_main.get_tower_from_vision();
-        if (t_full[0] != t):
+        #t_full = vision_main.get_tower_from_vision();
+        """if (t_full[0] != t):
             print("tower seen is different from tower stored");
             print(t);
             print('tower seen is');
             print(t_full[0]);
-            t_full[0] = t;
+            t_full[0] = t;"""
         next_move = jenga_logic.make_best_move(t);
-        in_str = str(next_move[0]) + ' ';
+        "in_str = str(next_move[0]) + ' ';
         in_str += str(next_move[1]) + ' ';
         in_str += str(next_move[2]) + ' ';
         in_str += str(next_move[3]) + ' 0  >waypoints.txt';
         in_str = './waypoints '+ in_str;
         os.system(in_str);
-        vision_mode = 'take'
+        vision_mode = 'take'"
         way_point_file = open('./waypoints.txt');
         for line in way_point_file:
             print (line);
             print("line was printed");
             inpt = line;
             if (line[0] == 'P'):
-                if (currentxyz == []):
+                """if (currentxyz == []):
                     assert(False);
                 startr, startc, endr, endc = next_move;
                 if (vision_mode == 'take'):
@@ -136,9 +136,9 @@ def one_player_main():
                     c_goal = endc;
                 error = vision_main.distance_from_goal(r_goal, c_goal, t_full);
                 print('error is');
-                print(error);
-                i = raw_input("test_error")
-                new_goal = [];
+                print(error);"""
+                i = raw_input("correct for error")
+                """new_goal = [];
                 for i in range(3):
                     new_goal.append(current_xyz[i] + error[i]);
                 lin = [];
@@ -149,9 +149,9 @@ def one_player_main():
                 lin = 'M,' + lin + '\n';
                 print('lin is now');
                 print(lin);
-                i = raw_input('testing error correction');
+                i = raw_input('testing error correction');"""
             if (line[0] == 'M'):
-                inpt = inpt[2::];#get rid of the M,
+                """inpt = inpt[2::];#get rid of the M,
                 inpt = inpt.split(',');
                 theta_goal = int(float(inpt[-1])); #save the theta goal
                 inpt = inpt[:-1];
@@ -170,14 +170,14 @@ def one_player_main():
                 lin.append(theta_servo);
                 lin = ','.join(lin);
                 lin = lin.replace(' ', '');
-                lin = 'M,' + lin + '\n';
+                lin = 'M,' + lin + '\n';"""
             else:
                 lin = line;
             print (lin)
             print("lin was printed");
             time.sleep(1)
             ser.setDTR(level=0)
-            time.sleep(1)
+            time.sleep(.1)
             temp = ser.write(lin);
             result = ser.readline();
             print result;
