@@ -6,6 +6,7 @@ def full_move_ser(t, opposition_move);
     s = opposition_move[:-1]
     s = s.split(',');
     s = map(int, s);
+    s[:] = [x - 1 for x in s];
     jenga_logic.make_full_move(t, s[0],s[1],s[2],s[3]);
     return;
 
@@ -17,6 +18,8 @@ def main()
     while(True):
         if (first_move == 'false'):
             opposition_move = ser.readline();
+            print('opposition move is');
+            print(opposition_move);
             full_move_ser(t, opposition_move);
         next_move_from = jenga_logic.make_best_move(t);
         l = len(t);
@@ -38,9 +41,11 @@ def main()
         move += ',';
         move +=str(next_move_end[1] +1);
         move += ';'
+        print('our move is');
+        print(move);
         ser.setDTR(level=0)
         time.sleep(.1)
-        temp = ser.write(lin);
+        temp = ser.write(move);
         if (first_move != 'false'):
             opposition_move = ser.readline();
             full_move_ser(t, opposition_move);
