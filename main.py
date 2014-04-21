@@ -89,7 +89,7 @@ def callibrate():
     while (True):
         lin = raw_input("what input should I do?");
         print('lin is ' + lin);
-	if (lin == 'break'):
+	    if (lin == 'break'):
             return
         ser.setDTR(level=0)
         time.sleep(.1)

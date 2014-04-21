@@ -87,20 +87,20 @@ def get_subtower(blocks):
 
 
 
-def main(sfilename, dfilename):#source then destination
+left_tower = [55, 15, 192, 286];
+right_tower = [154, 15, 285, 286];
+
+def main(sfilename, dfilename, tower_location):#source then destination
     real_img = cv2.imread(sfilename, cv2.CV_LOAD_IMAGE_COLOR);
     bw = cv2.imread(sfilename,cv2.CV_LOAD_IMAGE_GRAYSCALE)
     #cv2.adaptiveBilateralFilter(bw, (7, 7), 2)
-    bw = cv2.GaussianBlur(bw, (3,3), .4);#works solidly well
+    bw = cv2.GaussianBlur(bw, (15,15), 1);#works solidly well
     #edges = cv2.Canny(bw, 12.75,31.875);
     edges = cv2.Canny(bw, 70, 175);
     #edges = cv2.Canny(bw, 100, 200);
     cfile_name = sfilename[:-4] + '_canny' + '.JPG';
     cv2.imwrite(cfile_name, edges);
-    starty = 65;
-    endy = starty + 223;
-    startx = 130;
-    endx = startx + 160;
+    startx, starty, endx, endy = tower_location;
     edges = edges[starty:endy, startx:endx];
     cascadeb = cv2.CascadeClassifier('./detectors/blocks.xml');
     maxSizb= (60,45)
@@ -130,6 +130,7 @@ def main(sfilename, dfilename):#source then destination
     return (t, row, col);
 
 
-main('./sources/output0.JPG', './results/output0.JPG');
+main('./left.JPG', './results/left.JPG', left_tower);
+main('./right.JPG', './results/right.JPG', right_tower);
 
 

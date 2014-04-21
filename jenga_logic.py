@@ -28,6 +28,18 @@ def place_block(tower):
     print("tried to place a block in a full row")
     return;
 
+def make_full_move(tower, startr, startc, endr, endc):
+    if (tower[startr][startc] == False):
+        print("can't make move, no block there");
+        return;
+    tower[startr][startc] = False;
+    if (tower[endr][endc]):
+        print("putting block where there is already a block");
+        return;
+    tower[endr][endc] = True;
+    return;
+
+
 def make_move(tower, startr, startc): #automatically places the end in the middle, then outsides
     if (tower[startr][startc] == False):
         print ("can't move where there's not a block")
