@@ -2,17 +2,20 @@ import time
 import serial
 import jenga_logic
 
-def full_move_ser(t, opposition_move);
-    s = opposition_move[:-1]
+def full_move_ser(t, opposition_move):
+    print('their move is');
+    print(opposition_move);
+    s = opposition_move[:-3]
     s = s.split(',');
     s = map(int, s);
     s[:] = [x - 1 for x in s];
+    print(s);
     jenga_logic.make_full_move(t, s[0],s[1],s[2],s[3]);
     return;
 
-def main()
+def main():
     first_move = raw_input('am I making the first move?');
-    ser = serial.Serial('/dev/ttyS0', 9600);
+    ser = serial.Serial('/dev/tty.usbserial-FTG9K5QZ', 115200);
     print ("serial successful");
     t = jenga_logic.create_tower()
     while(True):
@@ -23,6 +26,7 @@ def main()
             full_move_ser(t, opposition_move);
         next_move_from = jenga_logic.make_best_move(t);
         l = len(t);
+        print(t);
         top_row = t[l-1];
         if (jenga_logic.is_full(top_row)):
             next_move_end = (l, 1);
@@ -33,6 +37,7 @@ def main()
                 next_move_end = (l-1, 0);
             else:
                 next_move_end = (l-1, 2);
+        jenga_logic.make_move(t, next_move_from[0], next_move_from[1]);
         move = str(next_move_from[0]+1);
         move += ','
         move += str(next_move_from[1]+1);
@@ -51,5 +56,5 @@ def main()
             full_move_ser(t, opposition_move);
 
 
-
+main()
 

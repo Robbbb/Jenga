@@ -33,8 +33,12 @@ def make_full_move(tower, startr, startc, endr, endc):
         print("can't make move, no block there");
         return;
     tower[startr][startc] = False;
+
+    if (len(tower) == endr):
+        tower.append([False, False, False]);
     if (tower[endr][endc]):
         print("putting block where there is already a block");
+        assert(False);
         return;
     tower[endr][endc] = True;
     return;
