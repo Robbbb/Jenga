@@ -11,11 +11,12 @@ def full_move_ser(t, opposition_move):
     s[:] = [x - 1 for x in s];
     print(s);
     jenga_logic.make_full_move(t, s[0],s[1],s[2],s[3]);
+    print(t);
     return;
 
 def main():
     first_move = raw_input('am I making the first move?');
-    ser = serial.Serial('/dev/tty.usbserial-FTG9K5QZ', 115200);
+    ser = serial.Serial('/dev/ttyUSB0', 115200);
     print ("serial successful");
     t = jenga_logic.create_tower()
     while(True):
@@ -25,7 +26,7 @@ def main():
             print(opposition_move);
             full_move_ser(t, opposition_move);
         r1, c1, r2,c2 = jenga_logic.make_best_move(t);
-        print(t);
+
         jenga_logic.make_full_move(t, r1,c1,r2,c2);
         move = str(r1+1);
         move += ','
@@ -37,13 +38,18 @@ def main():
         move += ';'
         print('our move is');
         print(move);
+        print('after our move, t is now');
+        print(t);
         ser.setDTR(level=0)
         time.sleep(.1)
         temp = ser.write(move);
         if (first_move != 'false'):
             opposition_move = ser.readline();
             full_move_ser(t, opposition_move);
-
+            print('opposition move is');
+            print(opposition_move);
+            print('t is');
+            print(t);
 
 main()
 
