@@ -39,6 +39,7 @@ float equationH(float par1,float par2,float z)
 
 float equationSteps(float h,float theta)
 {
+    //printf("h theta %f %f\n",h,theta);
     return -(-stepperrev*h/pitch+theta*stepperrev/(2.0*pi));
 }
 
@@ -235,6 +236,7 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     printf("M,%f,%f,%f,%f\n",x[0],y[0],z[0],theta[0]);//go to intial position, above the take position and oriented
     printf("M,%f,%f,%f,%f\n",x[1],y[1],z[1],theta[1]);//lower down
     printf("M,%f,%f,%f,%f\n",x[2],y[2],z[2],theta[2]);//get closer
+    printf("P\n");//pause for cv
     printf("V,1\n");//vacuum on
     printf("L,1\n");//take the block
     printf("M,%f,%f,%f,%f\n",x[3],y[3],z[3],theta[3]);//take away
@@ -243,6 +245,7 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     printf("M,%f,%f,%f,%f\n",x[6],y[6],z[6],theta[6]);//lower a bit
     printf("L,0\n");//neumatic cylinder extended
     printf("M,%f,%f,%f,%f\n",x[7],y[7],z[7],theta[7]);//get close
+    printf("P\n");//pause for cv
     printf("V,0\n");//vacuum off, drop the block
     //M for move
     //V for vacuum
