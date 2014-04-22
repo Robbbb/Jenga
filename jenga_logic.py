@@ -1,4 +1,4 @@
-
+import time
 
 def create_tower():
     tower = [];
@@ -43,6 +43,35 @@ def make_full_move(tower, startr, startc, endr, endc):
     tower[endr][endc] = True;
     return;
 
+def is_empty(row):
+    result = ((not row[0]) and (not row[1]) and (not row[2]));
+    return result;
+
+
+def undo_full_move(tower, startr, startc, endr, endc):
+    assert(tower[endr][endc]);
+    assert(not tower[startr][startc]);
+    tower[endr][endc] = False;
+    tower[startr][startc] = True;
+    if (is_empty(tower[endr])):
+        del(tower[-1]);
+    return;
+
+
+def is_legal_move(tower, startr, startc, endr, endc):
+    if (startr > max_legal_from(tower)):
+        return False;
+    if (endr > max_legal_to(tower)):
+        return False;
+    if (startc < 0 or endc < 0):
+        return False;
+    if (startc > 2 or endc > 2):
+        return False;
+    result = tower[startr][startc];
+    if (endr != len(tower)):
+        result = result and (not tower[endr][endc]);
+    return result;
+
 
 def make_move(tower, startr, startc): #automatically places the end in the middle, then outsides
     if (tower[startr][startc] == False):
@@ -54,7 +83,7 @@ def make_move(tower, startr, startc): #automatically places the end in the middl
         tower.append([False,False,False]); #add an empty row
     place_block(tower);
     return;
-
+"""
 def undo_move(tower, prevr, prevc): #used in the simulator
 
     endr = tower[len(tower) - 1];
@@ -78,7 +107,7 @@ def undo_move(tower, prevr, prevc): #used in the simulator
     tower[prevr][prevc] = True;
     return
 
-
+"""
 def get_n(row): #gets the number of blocks in the row
     s = 0
     if (row[0]):
@@ -143,38 +172,54 @@ def side_score(tside):
         score += error/maxerror
     return score
 
-def get_score(tower, r, c):
+def get_score(tower, r1, c1, r2, c2):
     score = 0;
-    score += r+1
-    make_move(tower, r, c)
+    score += r1+1
+    assert(is_legal_move(tower,r1,c1,r2,c2));
+    make_full_move(tower, r1, c1, r2, c2);
     t1 = tower[::2];#t1 and t2 are the two faces of each tower
     t2 = tower[1::2];
     score += 30*side_score(t1);
     score += 30*side_score(t2);
-    undo_move(tower, r, c)
+    undo_full_move(tower, r1, c1, r2, c2);
     return score;
 
-def max_legal(tower):
+def max_legal_from(tower):
     l = len(tower);
     if is_full(tower[l-1]):
         return l-1;
     return l-2;
 
 
+def max_legal_to(tower):
+    l = len(tower);
+    if (is_full(tower[l-1])):
+        return l;
+    return l-1;
+
+
+
 def make_best_move(tower):
     min_score = 10000000000000000000000 #stupid high
     best_r = -1;
     best_c = -1;
-    l = max_legal(tower);
+    best_r2 = -1;
+    best_c2 = -1;
+    l = max_legal_from(tower);
     for i in range(2, l): #we can't get the first row right now
         for j in range(0,3):
-            if(tower[i][j]):
-                scor = get_score(tower, i, j);
-                if (scor < min_score):
-                    min_score = scor;
-                    best_r = i;
-                    best_c = j;
-    return (best_r, best_c)
+            final_row = max_legal_to(tower);
+            for final_col in range(0,3):
+
+                if(is_legal_move(tower,i, j, final_row,final_col)):
+                    scor = get_score(tower, i, j, final_row, final_col);
+                    if (scor < min_score):
+                        min_score = scor;
+                        best_r = i;
+                        best_c = j;
+                        best_r2 = final_row;
+                        best_c2 = final_col;
+    return (best_r, best_c, best_r2, best_c2);
 
 
 def current_state(tower):
@@ -191,19 +236,33 @@ def main_two_player():
     while(True):
         row = int(input("make your move, enter row"));
         col = int(input("now enter col"));
-        make_move(t, row, col);
+        r2 = int(raw_input("what row are you moving to?"));
+        c2 = int(raw_input("waht col are you moving to?"));
+        if(not is_legal_move(t, row, col, r2, c2)):
+            print('not a legal move');
+            continue;
+        make_full_move(t, row, col, r2, c2);
+        print('after your move, t is now');
+        print(t);
         if(not current_state(t)):
             print("tower should have fallen over, computer won, computer overlords are going to take over in");
+            time.sleep(1);
             print("5");
+            time.sleep(1);
             print("4");
+            time.sleep(1);
             print("3");
+            time.sleep(1);
             print("2");
+            time.sleep(1);
             print("1");
             return;
         our_move = make_best_move(t);
+        make_full_move(t, our_move[0], our_move[1], our_move[2], our_move[3])
         print("our move is");
         print(our_move)
-        make_move(t, our_move[0], our_move[1])
+        print('t is now');
+        print(t);
         if (not current_state(t)):
             print("computer lost, I have dishonored master, computer overlords will have to wait, for now.....");
             return;

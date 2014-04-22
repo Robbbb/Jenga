@@ -24,27 +24,16 @@ def main():
             print('opposition move is');
             print(opposition_move);
             full_move_ser(t, opposition_move);
-        next_move_from = jenga_logic.make_best_move(t);
-        l = len(t);
+        r1, c1, r2,c2 = jenga_logic.make_best_move(t);
         print(t);
-        top_row = t[l-1];
-        if (jenga_logic.is_full(top_row)):
-            next_move_end = (l, 1);
-        else:
-            if (not top_row[1]):
-                next_move_end = (l-1, 1);
-            elif(not top_row[0]):
-                next_move_end = (l-1, 0);
-            else:
-                next_move_end = (l-1, 2);
-        jenga_logic.make_move(t, next_move_from[0], next_move_from[1]);
-        move = str(next_move_from[0]+1);
+        jenga_logic.make_full_move(t, r1,c1,r2,c2);
+        move = str(r1+1);
         move += ','
-        move += str(next_move_from[1]+1);
+        move += str(c1+1);
         move += ',';
-        move += str(next_move_end[0] +1);
+        move += str(r2 +1);
         move += ',';
-        move +=str(next_move_end[1] +1);
+        move +=str(c2 +1);
         move += ';'
         print('our move is');
         print(move);
