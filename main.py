@@ -43,7 +43,19 @@ def one_player_main():
                 error = vision_main.distance_from_goal(r_goal, c_goal, t_full);
                 print('error is');
                 print(error);
-                i = raw_input("pause and adjust")
+                i = raw_input("test_error")
+                new_goal = [];
+                for i in range(3):
+                    new_goal.append(current_xyz[i] + error[i]);
+                lin = [];
+                for i in range(3):
+                    st = str(new_goal[i]).zfill(5);
+                lin.append(theta_servo);
+                lin = ','.join(lin);
+                lin = 'M,' + lin + '\n';
+                print('lin is now');
+                print(lin);
+                i = raw_input('testing error correction');
             if (line[0] == 'M'):
                 inpt = inpt[2::];#get rid of the M,
                 inpt = inpt.split(',');
