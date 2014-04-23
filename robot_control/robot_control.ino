@@ -14,8 +14,8 @@ Servo endEffectorServo;
 
 // Define some steppers and the pins the will use
 Stepper stepper1(200,5,4,2,3);
-Stepper stepper3(200,6,7,8,9);
-Stepper stepper2(200,13,12,11,10);
+Stepper stepper2(200,6,7,8,9);
+Stepper stepper3(200,13,12,11,10);
 
 //fw
 
