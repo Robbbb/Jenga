@@ -73,6 +73,8 @@ def is_legal_move(tower, startr, startc, endr, endc):
     return result;
 
 
+
+
 def make_move(tower, startr, startc): #automatically places the end in the middle, then outsides
     if (tower[startr][startc] == False):
         print ("can't move where there's not a block")

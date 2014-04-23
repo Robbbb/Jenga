@@ -130,7 +130,7 @@ def main(sfilename, dfilename, tower_location):#source then destination
     return (t, row, col);
 
 
-main('./left.JPG', './results/left.JPG', left_tower);
-main('./right.JPG', './results/right.JPG', right_tower);
+#main('./left.JPG', './results/left.JPG', left_tower);
+#main('./right.JPG', './results/right.JPG', right_tower);
 
 

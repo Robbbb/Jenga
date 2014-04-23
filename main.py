@@ -1,38 +1,49 @@
 import os
+import vision_main
 import serial
 import commands
 import time
 import jenga_logic
-def main():
+def one_player_main():
     ser = serial.Serial('/dev/ttyS0', 9600);
     print ("serial successful");
     t = jenga_logic.create_tower();
+    currentxyz =[];
     while(jenga_logic.current_state(t)): #while tower is still up
-        next_move_from = jenga_logic.make_best_move(t);
-        next_move_from = (7, 2)
-        l = len(t);
-        top_row = t[l-1];
-        if (jenga_logic.is_full(top_row)):
-            next_move_end = (l, 1);
-        else:
-            if (not top_row[1]):
-                next_move_end = (l-1, 1);
-            elif(not top_row[0]):
-                next_move_end = (l-1, 0);
-            else:
-                next_move_end = (l-1, 2);
-        in_str = str(next_move_from[0]) + ' ';
-        in_str += str(next_move_from[1]) + ' ';
-        in_str += str(next_move_end[0]) + ' ';
-        in_str += str(next_move_end[1]) + ' 0  >waypoints.txt';
+        t_full = vision_main.get_tower_from_vision();
+        if (t_full[0] != t):
+            print("tower seen is different from tower stored");
+            print(t);
+            print('tower seen is');
+            print(t_full[0]);
+            t_full[0] = t;
+        next_move = jenga_logic.make_best_move(t);
+        in_str = str(next_move[0]) + ' ';
+        in_str += str(next_move[1]) + ' ';
+        in_str += str(next_move[2]) + ' ';
+        in_str += str(next_move[3]) + ' 0  >waypoints.txt';
         in_str = './waypoints '+ in_str;
         os.system(in_str);
+        vision_mode = 'take'
         way_point_file = open('./waypoints.txt');
         for line in way_point_file:
             print (line);
             print("line was printed");
             inpt = line;
-            i = raw_input("pause and adjust")
+            if (line[0] == 'P'):
+                if (currentxyz == []):
+                    assert(False);
+                startr, startc, endr, endc = next_move;
+                if (vision_mode == 'take'):
+                    r_goal = startr;
+                    c_goal = startc;
+                else:
+                    r_goal = endr;
+                    c_goal = endc;
+                error = vision_main.distance_from_goal(r_goal, c_goal, t_full);
+                print('error is');
+                print(error);
+                i = raw_input("pause and adjust")
             if (line[0] == 'M'):
                 inpt = inpt[2::];#get rid of the M,
                 inpt = inpt.split(',');
@@ -42,10 +53,12 @@ def main():
                 cmd_str = "./jenga_test "+inpt;
                 lin = commands.getoutput(cmd_str);
                 lin = lin.split(',');
+                xyz_temp = lin[:-1];
+                currentxyz = map(int, xyz_temp);
                 theta_ee = int(float(lin[-1]));
                 lin = lin[:-1];
                 theta_servo = theta_goal - theta_ee;
-                theta_servo = theta_servo + 90;#should be 90
+                theta_servo = theta_servo + 100;#should be 90
                 theta_servo = str(theta_servo).zfill(4);
                 #print(theta_ee);
                 lin.append(theta_servo);
@@ -61,18 +74,10 @@ def main():
             time.sleep(1)
             temp = ser.write(lin);
             result = ser.readline();
-            print result;i
-        i = input("pause and adjust")
-        lin = 'M,-0030,-0030,-0030';
-        ser.setDTR(level=0)
-        time.sleep(1)
-        temp = ser.write(lin);
-        result = ser.readline();
-
-
+            print result;
         print('move was')
-        print(next_move_from);
-        print(next_move_end);
+        print(next_move);
+        print(tower_is);
 
 
 
@@ -89,12 +94,12 @@ def callibrate():
     while (True):
         lin = raw_input("what input should I do?");
         print('lin is ' + lin);
-	    if (lin == 'break'):
+        if (lin == 'break'):
             return
         ser.setDTR(level=0)
         time.sleep(.1)
         temp = ser.write(lin);
         result = ser.readline();
-	print(result);
+    print(result);
 callibrate()
 #main()
