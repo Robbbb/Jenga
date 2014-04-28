@@ -231,11 +231,12 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     
     
     //path 0 inital,1 lower down, 2 get closer, take, 3 get away, 4 go up, 5 orient to put, 6 lower a bit, 7 get close, put
-    printf("L,0\n");//pneumatic cylinder extended
+    printf("L,1\n");//pneumatic cylinder retracted
     printf("V,0\n");//vacuum off
     printf("M,%f,%f,%f,%f\n",x[0],y[0],z[0],theta[0]);//go to intial position, above the take position and oriented
     printf("M,%f,%f,%f,%f\n",x[1],y[1],z[1],theta[1]);//lower down
     printf("M,%f,%f,%f,%f\n",x[2],y[2],z[2],theta[2]);//get closer
+    printf("L,0\n");//pneumatic cylinder extended
     printf("P\n");//pause for cv
     printf("V,1\n");//vacuum on
     printf("L,1\n");//take the block
@@ -274,7 +275,7 @@ int parameterCheck() //return 0 OKAY, return 1 error
     
     dangerousZ[0]=JengaHeight*(0+0.5)+EndEffectorHeightOffset;// layer 0 z
     dangerousZ[1]=JengaHeight*(10+0.5)+EndEffectorHeightOffset;//layer 10 z
-    for (int i=0; i<2; i++) {
+    for (int i=0; i<3; i++) {
         dangerousY[i]=(0.5+i)*JengaWidth;
     }
     //check all the combinations

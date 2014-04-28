@@ -1,5 +1,5 @@
 float screwDistance=325.269;
-float armLength=200;
+float armLength=300;//200
 float nutLength=37.5;
 float endLength=50;
 float pi=3.1416;
