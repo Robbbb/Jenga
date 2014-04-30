@@ -236,9 +236,12 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     printf("M,%f,%f,%f,%f\n",x[0],y[0],z[0],theta[0]);//go to intial position, above the take position and oriented
     printf("M,%f,%f,%f,%f\n",x[1],y[1],z[1],theta[1]);//lower down
     printf("M,%f,%f,%f,%f\n",x[2],y[2],z[2],theta[2]);//get closer
+    
+    
+    printf("V,1\n");//vacuum on
     printf("L,0\n");//pneumatic cylinder extended
     printf("P\n");//pause for cv
-    printf("V,1\n");//vacuum on
+    
     printf("L,1\n");//take the block
     printf("M,%f,%f,%f,%f\n",x[3],y[3],z[3],theta[3]);//take away
     printf("M,%f,%f,%f,%f\n",x[4],y[4],z[4],theta[4]);//go up
