@@ -23,7 +23,7 @@ def versus_human_smart():
         in_str += str(next_move[1]) + ' ';
         in_str += str(next_move[2]) + ' ';
         in_str += str(next_move[3]) + ' 1  >waypoints.txt';
-        in_str = './waypoints '+ in_str;
+        in_str = './motorpath '+ in_str;
         os.system(in_str);
         vision_mode = 'take'
         way_point_file = open('./waypoints.txt');
@@ -100,6 +100,7 @@ def versus_human_smart():
 
 def one_player_main():
     ser = serial.Serial('/dev/ttyS0', 9600);
+    coms_ser = serial.Serial('/dev/ttyUSB0', 115200);
     print ("serial successful");
     t = jenga_logic.create_tower();
     currentxyz =[];
@@ -112,13 +113,13 @@ def one_player_main():
             print(t_full[0]);
             t_full[0] = t;"""
         next_move = jenga_logic.make_best_move(t);
-        """in_str = str(next_move[0]) + ' ';
+        in_str = str(next_move[0]) + ' ';
         in_str += str(next_move[1]) + ' ';
         in_str += str(next_move[2]) + ' ';
-        in_str += str(next_move[3]) + ' 0  >waypoints.txt';
-        in_str = './waypoints '+ in_str;
+        in_str += str(next_move[3]) + ' 1  >waypoints.txt';
+        in_str = './motorpath '+ in_str;
         os.system(in_str);
-        vision_mode = 'take'"""
+        vision_mode = 'take'
         way_point_file = open('./waypoints.txt');
         for line in way_point_file:
             print (line);
@@ -138,6 +139,8 @@ def one_player_main():
                 print('error is');
                 print(error);"""
                 i = raw_input("correct for error")
+                if (i[0] == 'M'):
+                    lin = i;
                 """new_goal = [];
                 for i in range(3):
                     new_goal.append(current_xyz[i] + error[i]);
@@ -151,6 +154,7 @@ def one_player_main():
                 print(lin);
                 i = raw_input('testing error correction');"""
             if (line[0] == 'M'):
+                lin = line;
                 """inpt = inpt[2::];#get rid of the M,
                 inpt = inpt.split(',');
                 theta_goal = int(float(inpt[-1])); #save the theta goal
@@ -186,6 +190,7 @@ def one_player_main():
         print(tower_is);
         way_point_file.close();
         jenga_logic.make_full_move(t, next_move[0], next_move[1], next_move[2], next_move[3]);
+        coms_test.send_move_ser(coms_ser, next_move);
         print (t);
     ser.close()
     return;

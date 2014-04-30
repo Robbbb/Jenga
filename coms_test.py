@@ -14,6 +14,23 @@ def full_move_ser(t, opposition_move):
     print(t);
     return;
 
+def send_move_ser(ser, our_move):
+    r1,c1,r2,c2 = our_move;
+    move = str(r1+1);
+    move += ','
+    move += str(c1+1);
+    move += ',';
+    move += str(r2 +1);
+    move += ',';
+    move +=str(c2 +1);
+    move += ';'
+    print('our move is');
+    print(move);
+    ser.setDTR(level=0)
+    time.sleep(.1)
+    temp = ser.write(move);
+    return;
+
 def main():
     first_move = raw_input('am I making the first move?');
     ser = serial.Serial('/dev/ttyUSB0', 115200);
