@@ -117,9 +117,10 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     int s1,s2,s3,sv;
     GenerateMotorCoord(fromLayer,fromPosition,firstLayerBlockAlignWithX,&s1,&s2,&s3,&sv);
     printf("M,%05d,%05d,%05d,%04d\n",s1,s2,s3,sv);//go to take position, above the take position and oriented
+    printf("P\n");//pause for cv
     printf("V,1\n");//vacuum on
     printf("L,0\n");//pneumatic cylinder extend
-    printf("P\n");//pause for cv
+    
     
     printf("L,1\n");//pneumatic cylinder retracted
     
