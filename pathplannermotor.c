@@ -116,15 +116,24 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     
     int s1,s2,s3,sv;
     GenerateMotorCoord(fromLayer,fromPosition,firstLayerBlockAlignWithX,&s1,&s2,&s3,&sv);
-    printf("M,%05d,%05d,%05d,%04d\n",s1,s2,s3,sv);//go to  position, above the take position and oriented
+    printf("M,%05d,%05d,%05d,%04d\n",s1,s2,s3,sv);//go to take position, above the take position and oriented
+    printf("V,1\n");//vacuum on
     printf("L,0\n");//pneumatic cylinder extend
     printf("P\n");//pause for cv
-    printf("V,1\n");//vacuum on
+    
     printf("L,1\n");//pneumatic cylinder retracted
     
-    //int s1,s2,s3,sv;
+    int aboveLayer=toLayer;
+    
+    if ((aboveLayer-fromLayer)%2) {//if the layer above toLayer do not have the same orientation with from layer
+        aboveLayer++;
+    }
+    
+    GenerateMotorCoord(aboveLayer,fromPosition,firstLayerBlockAlignWithX,&s1,&s2,&s3,&sv);
+    printf("M,%05d,%05d,%05d,%04d\n",s1,s2,s3,sv);//go to put above put position
+    
     GenerateMotorCoord(toLayer,toPosition,firstLayerBlockAlignWithX,&s1,&s2,&s3,&sv);
-    printf("M,%05d,%05d,%05d,%04d\n",s1,s2,s3,sv);//go to put position, above the take position and oriented
+    printf("M,%05d,%05d,%05d,%04d\n",s1,s2,s3,sv);//go to put position,and oriented
     
     printf("L,0\n");//pneumatic cylinder extend
     printf("P\n");//pause for cv
