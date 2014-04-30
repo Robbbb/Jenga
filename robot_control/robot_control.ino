@@ -25,7 +25,7 @@ int pos2;
 int pos3;
 int spinServoPin = 14; //(A0)
 int rodSpanInches = 11;//desired span of lead screws
-int maxSpeed = 50;//I have not yet played with this. Higher is faster, obvi
+int maxSpeed = 100;//I have not yet played with this. Higher is faster, obvi
 //float maxAccel = 300.0;
 int need_new;
 int first_goal;
@@ -34,6 +34,55 @@ int v; //do we need to change vaccume
 int lin; //do we need to change the linear actuator state
 int lin_pin = 16;
 int vac_pin = 15;
+
+int global_state;
+int state_1, state_2, state_3;
+//
+
+void callibrate()
+{
+  while(!global_state)
+  {
+    if (!state_1){
+      
+      stepper1.step(1);
+    }
+    if (!state_2){
+      stepper2.step(1);
+    }
+    if (!state_3){
+      stepper3.step(1);
+    } 
+  }
+  state_1 = 0;
+  state_2 = 0;
+  state_3 = 0;
+  global_state = 0;
+}
+
+
+void interupt1(){
+  state_1 = 1;
+  global_state = (state_1 && state_2 && state_3);
+  pos1 = 0;
+  callibrate();
+}
+void interupt2(){
+  state_2 = 1;
+  global_state = (state_1 && state_2 && state_3);
+  pos2 = 0;
+  callibrate();
+}
+void interupt3(){
+  state_3 = 1;
+  global_state = (state_1 && state_2 && state_3);
+  pos3 = 0;
+  callibrate();
+}
+
+
+
+
 
 
 void move_ee(int goal1, int goal2, int goal3, int svgoal){
@@ -99,6 +148,10 @@ void move_ee(int goal1, int goal2, int goal3, int svgoal){
 
 char vac; //vaccume
 char lin_ac; //linear actuator
+int limit1;
+int limit2;
+int limit3;
+
 void setup()
 {
 
@@ -124,6 +177,17 @@ void setup()
   stepper1.setSpeed(maxSpeed);
   stepper2.setSpeed(maxSpeed);
   stepper3.setSpeed(maxSpeed);
+  pinMode(limit1, INPUT_PULLUP);
+  pinMode(limit2, INPUT_PULLUP);
+  pinMode(limit3, INPUT_PULLUP);
+  attachInterrupt(limit1, interupt1, FALLING);
+  attachInterrupt(limit2, interupt2, FALLING);
+  attachInterrupt(limit3, interupt3, FALLING);
+  state_1 = 0;
+  state_2 = 0;
+  state_3 = 0;
+  global_state = 0;
+  callibrate();
 
   //  float initShift = 0.0; //unknown units to move all motors at boot
   /*
@@ -227,10 +291,10 @@ void read_jenga_serial(){
 
 void set_vacuum(int state){
   if (state){
-    digitalWrite(vac_pin, HIGH);
+    digitalWrite(vac_pin, LOW);
   }
   else{
-    digitalWrite(vac_pin, LOW);
+    digitalWrite(vac_pin, HIGH);
   }
   v = 0;
   int i = 0;
@@ -245,10 +309,10 @@ void set_vacuum(int state){
 
 void set_linear(int state){
   if (state){
-    digitalWrite(lin_pin, HIGH);
+    digitalWrite(lin_pin, LOW);
   }
   else{
-    digitalWrite(lin_pin, LOW);
+    digitalWrite(lin_pin, HIGH);
   }
   lin = 0;
   int i = 0;
