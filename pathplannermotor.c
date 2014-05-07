@@ -124,7 +124,7 @@ void GeneratePath(int fromLayer,int fromPosition,int toLayer,int toPosition,int 
     
     printf("L,1\n");//pneumatic cylinder retracted
     
-    int aboveLayer=toLayer;
+    int aboveLayer=toLayer+1;
     
     if ((aboveLayer-fromLayer)%2) {//if the layer above toLayer do not have the same orientation with from layer
         aboveLayer++;
